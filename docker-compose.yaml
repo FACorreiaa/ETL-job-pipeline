@@ -12,7 +12,7 @@ services:
       - "8181:8181"
       - "8000:8000"
     environment:
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=jaeger:4318
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=otel-collector:4317
       - METRICS_PORT=8181
       - SERVER_PORT=8000
     depends_on:
@@ -20,14 +20,24 @@ services:
       - tempo
     networks:
       - score-app-network
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
+    volumes:
+      - ./config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    command: [ "--config", "/etc/otel-collector-config.yaml" ]
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8889:8889"
+    networks:
+      - score-app-network
 
   tempo:
     image: grafana/tempo:latest
     container_name: tempo
     ports:
-      - "3200:3200"       # Tempo backend server
-      - "5417:4317"       # if we had grpc
-      - "5418:4318"
+      - "3200:3200"
     volumes:
       - ./config/tempo.yml:/etc/tempo/tempo.yml
     command:
@@ -67,8 +77,6 @@ services:
     ports:
       - "16686:16686"      # Jaeger UI (open in your browser)
       - "6831:6831/udp"    # Jaeger Agent (thrift UDP)
-      - "4317:4317"        # OTLP gRPC receiver (if you want to use OTLP via gRPC)
-      - "4318:4318"        # OTLP HTTP receiver (if you want to use OTLP via HTTP)
     networks:
       - score-app-network
 
