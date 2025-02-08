@@ -224,7 +224,7 @@ func (s *DataLoaderService) LoadAllData(
 			return nil, fmt.Errorf("failed to load data from %s: %w", f.Name(), err)
 		}
 
-		// e.g. "waste_data.csv" => datasetName = "waste_data"
+		// e.g. "waste_data_old.csv" => datasetName = "waste_data"
 		datasetName := strings.TrimSuffix(f.Name(), ext)
 		combined[datasetName] = ds
 	}

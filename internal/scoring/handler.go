@@ -11,9 +11,9 @@ import (
 	"time"
 )
 
-const wastePath = "data/waste_data.csv"
-const emissionPath = "data/emissions_data.csv"
-const disclosurePath = "data/disclosure_data.csv"
+const wastePath = "data/waste_data_old.csv"
+const emissionPath = "data/emissions_data_old.csv"
+const disclosurePath = "data/disclosure_data_old.csv"
 
 type Handler struct {
 	Ctx            context.Context
@@ -24,7 +24,7 @@ type Handler struct {
 // CalculateScoreHandler Calculate scores and print in csv format
 func (h *Handler) CalculateScoreHandler(w http.ResponseWriter, r *http.Request) {
 	h.Logger.Info("Calculating score")
-	
+
 	lr := NewLoaderRegistry()
 	dataService := NewDataLoaderService(lr)
 
