@@ -12,7 +12,7 @@ def generate_random_date(start_year=2023, end_year=2025):
     random_date = start_date + datetime.timedelta(days=random_days)
     return random_date.strftime("%Y-%m-%d")
 
-def generate_disclosure_csv(filename, rows=1000000):
+def generate_disclosure_csv(filename, rows=10000000):
     """
     Generates a CSV with columns:
       company_id,date,dis_1,dis_2,dis_3,dis_4
@@ -32,7 +32,7 @@ def generate_disclosure_csv(filename, rows=1000000):
             dis_4 = round(random.uniform(0, 100), 2)
             writer.writerow([company_id, date_year_only, dis_1, dis_2, dis_3, dis_4])
 
-def generate_emissions_csv(filename, rows=1000000):
+def generate_emissions_csv(filename, rows=10000000):
     """
     Generates a CSV with columns:
       company_id,date,emi_1,emi_2,emi_3,emi_4
@@ -51,7 +51,7 @@ def generate_emissions_csv(filename, rows=1000000):
             emi_4 = round(random.uniform(0, 100), 2)
             writer.writerow([company_id, date_str, emi_1, emi_2, emi_3, emi_4])
 
-def generate_waste_csv(filename, rows=1000000):
+def generate_waste_csv(filename, rows=10000000):
     """
     Generates a CSV with columns:
       company_id,date,was_1,was_2,was_3,was_4
@@ -71,8 +71,8 @@ def generate_waste_csv(filename, rows=1000000):
 
 if __name__ == "__main__":
     # Generate the 3 CSVs with 10,000 rows each (customize row count if needed):
-    generate_disclosure_csv("disclosure_10k.csv", rows=1000000)
-    generate_emissions_csv("emissions_10k.csv", rows=1000000)
-    generate_waste_csv("waste_10k.csv", rows=1000000)
+    generate_disclosure_csv("disclosure_10k.csv", rows=10000000)
+    generate_emissions_csv("emissions_10k.csv", rows=10000000)
+    generate_waste_csv("waste_10k.csv", rows=10000000)
     
     print("Finished generating 3 CSV files with 10k rows each!")
