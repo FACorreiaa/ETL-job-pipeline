@@ -204,7 +204,17 @@ inside Grafana. The same process could be applied to a k8s cluster deployment.
 
 1. Chunk based processing
 2. Intermediate storage for incremental aggregation
-3. Use distributed data processing frameworks (e.g., Apache Spark or Flink) for real-time and batch processing# etl-data-preprocess-
+3. Use distributed data processing frameworks (e.g., Apache Spark or Flink) for real-time and batch processing
+
+# Changes post submission
+- [x] Add Gin Gonic (test middlewares)
+- [x] Add Zap for Logging
+- Create gRPC version to benchmark each HTTP vs gRPC
+- Use a Broker for this microservice
+- Deploy Kubernetes
+- Deploy Monitoring tools
+- Google Cloud Platform
+
 # ETL-job-pipeline
 
 # Benchmark HTTP vs gRPC
