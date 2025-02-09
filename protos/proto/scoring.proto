@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package scoringpb;
+
+service ScoringService {
+  rpc CalculateScores (CalculateRequest) returns (CalculateResponse);
+}
+
+message CalculateRequest {
+  string config_file = 1; // or pass needed params
+}
+
+message CalculateResponse {
+  repeated CompanyScore scores = 1;
+}
+
+message CompanyScore {
+  string company_id = 1;
+  int32 year = 2;
+  map<string, double> metrics = 3;
+}

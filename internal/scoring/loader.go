@@ -22,7 +22,7 @@ type DataLoader interface {
 type CSVLoader struct{}
 
 func (CSVLoader) loadData(ctx context.Context, path string) (map[CompanyYearKey]map[string]float64, error) {
-	return loadDatasetCSV(path) // reuse your existing CSV parsing function
+	return loadDatasetCSV(path)
 }
 
 // JSONLoader Temporary files to test the JSON Import only

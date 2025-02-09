@@ -10,7 +10,6 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
-	"google.golang.org/protobuf/proto"
 )
 
 var (
@@ -101,19 +100,4 @@ func (si *ServerInterceptor) UnaryServerInterceptor(ctx context.Context, req int
 	// TODO fill logic
 	resp, err := handler(ctx, req)
 	return resp, err
-}
-
-func getMessageSize(msg interface{}) int {
-	// Check if the message can be marshaled to proto
-	if protoMsg, ok := msg.(proto.Message); ok {
-		// Marshal the proto message and measure its size
-		data, err := proto.Marshal(protoMsg)
-		if err == nil {
-			return len(data)
-		}
-		// Log error if marshalling fails
-		Log.Warn("Failed to marshal proto message", zap.Error(err))
-	}
-	// Return 0 if the message isn't a proto message or failed to marshal
-	return 0
 }

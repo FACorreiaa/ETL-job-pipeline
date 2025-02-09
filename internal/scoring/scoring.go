@@ -10,7 +10,7 @@ import (
 
 	"go.uber.org/zap"
 
-	c "esgbook-software-engineer-technical-test-2024/config"
+	c "esgbook-software-engineer-technical-test-2024/pkg/config"
 )
 
 const (

@@ -7,7 +7,7 @@ services:
       context: .
       target: dev
     volumes:
-      - ./config:/app/config
+      - ./pkg/config:/app/config
     ports:
       - "8181:8181"
       - "8000:8000"
@@ -25,7 +25,7 @@ services:
     image: otel/opentelemetry-collector:latest
     container_name: otel-collector
     volumes:
-      - ./config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+      - ./pkg/config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
     command: [ "--config", "/etc/otel-collector-config.yaml" ]
     ports:
       - "4317:4317"
@@ -40,7 +40,7 @@ services:
     ports:
       - "3200:3200"
     volumes:
-      - ./config/tempo.yml:/etc/tempo/tempo.yml
+      - ./pkg/config/tempo.yml:/etc/tempo/tempo.yml
     command:
       - '-config.file=/etc/tempo/tempo.yml'
     networks:
@@ -51,7 +51,7 @@ services:
     container_name: prometheus
     command: --config.file=/etc/prometheus/prometheus.yml
     volumes:
-      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./pkg/config/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
     depends_on:
@@ -65,7 +65,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-          - ./config/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yml
+          - ./pkg/config/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yml
     depends_on:
       - prometheus
       - jaeger
@@ -87,7 +87,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - ./config/loki-config.yaml:/etc/loki/local-config.yaml
+      - ./pkg/config/loki-config.yaml:/etc/loki/local-config.yaml
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - score-app-network
@@ -97,7 +97,7 @@ services:
     image: grafana/promtail:latest
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - ./config/promtail-config.yaml:/etc/promtail/promtail.yaml
+      - ./pkg/config/promtail-config.yaml:/etc/promtail/promtail.yaml
     command: -config.file=/etc/promtail/promtail.yaml
     networks:
       - score-app-network

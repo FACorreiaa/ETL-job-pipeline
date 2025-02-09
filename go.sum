@@ -1,4 +1,6 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
+cloud.google.com/go v0.118.2 h1:bKXO7RXMFDkniAAvvuMrAPtQ/VHrs9e7J5UT3yrGdTY=
+cloud.google.com/go v0.118.2/go.mod h1:CFO4UPEPi8oV21xoezZCrd3d81K4fFkDTEJu4R8K+9M=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/FACorreiaa/fitme-grpc v0.0.0-20250206105117-b583f0ca1c3c h1:KAP/4vjMRHzZ+p1Q2txjtVsyu9EcvuN2PTCctg0dRfw=
 github.com/FACorreiaa/fitme-grpc v0.0.0-20250206105117-b583f0ca1c3c/go.mod h1:gJx3TsCJl2ddfF/NBGcnrCKjqnT7v4xMwtSWsJ3Cfc8=

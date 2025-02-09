@@ -23,8 +23,8 @@ def generate_disclosure_csv(filename, rows=1000000):
         writer = csv.writer(f)
         writer.writerow(headers)
         for _ in range(rows):
-            company_id = random.randint(1000, 1100)  # or any range of your choice
-            date_year_only = random.randint(2023, 2025)  # e.g., just the year
+            company_id = random.randint(1000, 1100)
+            date_year_only = random.randint(2023, 2025)
             # random floats for disclosures
             dis_1 = round(random.uniform(0, 100), 2)
             dis_2 = round(random.uniform(0, 100), 2)

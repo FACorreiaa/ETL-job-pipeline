@@ -29,6 +29,7 @@ require (
 )
 
 require (
+	cloud.google.com/go v0.118.2 // indirect
 	github.com/FACorreiaa/fitme-protos v0.0.0-20250125164354-fe5c3e352e12 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/sonic v1.12.7 // indirect
