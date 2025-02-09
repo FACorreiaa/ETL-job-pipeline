@@ -13,10 +13,6 @@ import (
 	"go.uber.org/zap"
 )
 
-const wastePath = "data/waste_data_old.csv"
-const emissionPath = "data/emissions_data_old.csv"
-const disclosurePath = "data/disclosure_data_old.csv"
-
 type Handler struct {
 	Ctx            context.Context
 	Logger         *zap.Logger

@@ -21,6 +21,7 @@ import (
 
 	"go.opentelemetry.io/otel"
 
+	s "esgbook-software-engineer-technical-test-2024/internal/scoring"
 	m "esgbook-software-engineer-technical-test-2024/middleware"
 
 	"esgbook-software-engineer-technical-test-2024/grpc-server/logger"
@@ -54,7 +55,7 @@ func RunHTTPServer(ctx context.Context, zapLogger *zap.Logger, port string) erro
 	router.Use(gin.Recovery())
 	router.Use(logger.ZapLoggingMiddleware(zapLogger))
 
-	h := scoring.Handler{
+	h := s.Handler{
 		Ctx:            ctx,
 		Logger:         zapLogger,
 		ConfigFileName: file,
