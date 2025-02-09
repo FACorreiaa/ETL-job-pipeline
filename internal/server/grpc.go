@@ -12,6 +12,8 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/reflection"
 
+	"esgbook-software-engineer-technical-test-2024/internal/scoring"
+	pb "esgbook-software-engineer-technical-test-2024/protos/modules/scoring/generated"
 	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc"
 	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpctracing"
 )
@@ -23,7 +25,6 @@ import (
 var isReady atomic.Value
 
 func RunGRPCServer(ctx context.Context, zapLogger *zap.Logger, port string, reg *prometheus.Registry) error {
-
 	// Initialize OpenTelemetry trace provider with options as needed
 	exp, err := grpctracing.NewOTLPExporter(ctx)
 	if err != nil {
@@ -35,46 +36,20 @@ func RunGRPCServer(ctx context.Context, zapLogger *zap.Logger, port string, reg 
 	otel.SetTracerProvider(tp)
 	//tracer = tp.Tracer("myapp")
 
-	// Bootstrap the gRPC server
+	zapLogger.Info("Attempting to start gRPC server on:", zap.String("port", port))
 	server, listener, err := grpc.BootstrapServer(port, zapLogger, reg, tp)
 	if err != nil {
 		return errors.Wrap(err, "failed to configure gRPC server")
 	}
+	zapLogger.Info("gRPC server successfully configured", zap.String("port", port))
 
-	// Register your services
-	//cpb.RegisterCustomerServer(server, container.CustomerService)
-	//upb.RegisterAuthServer(server, container.AuthService)
-	//ccpb.RegisterCalculatorServer(server, container.CalculatorService)
-	//apb.RegisterActivityServer(server, container.ServiceActivity)
-	//wpb.RegisterWorkoutServer(server, container.WorkoutService)
-	//mpb.RegisterUserMeasurementsServer(server, container.MeasurementService)
-	//
-	//mlpb.RegisterMealPlanServer(server, container.MealServices.MealPlanService)
-	//mlpb.RegisterDietPreferenceServiceServer(server, container.MealServices.DietPreferenceService)
-	//mlpb.RegisterFoodLogServiceServer(server, container.MealServices.FoodLogService)
-	//mlpb.RegisterIngredientsServer(server, container.MealServices.IngredientService)
-	//mlpb.RegisterTrackMealProgressServer(server, container.MealServices.TrackMealProgressService)
-	//mlpb.RegisterGoalRecommendationServer(server, container.MealServices.GoalRecommendationService)
-	//mlpb.RegisterMealReminderServer(server, container.MealServices.MealReminderService)
+	scoringServer := &scoring.GrpcScoringServer{
+		Logger:         zapLogger,
+		ConfigFileName: file,
+	}
 
-	// meal services
-	//mealServices := []mlpb.MealServer{
-	//	container.MealServices.MealPlanService,
-	//	container.MealServices.MealService,
-	//	container.MealServices.DietPreferenceService,
-	//	container.MealServices.FoodLogService,
-	//	container.MealServices.IngredientService,
-	//	container.MealServices.TrackMealProgressService,
-	//	container.MealServices.GoalRecommendationService,
-	//	container.MealServices.MealReminderService,
-	//}
-	//
-	//for _, service := range mealServices {
-	//	mlpb.RegisterMealServer(server, service)
-	//}
+	pb.RegisterScoringServiceServer(server, scoringServer)
 
-	//mlpb.RegisterMealServer(server, container.MealServices.MealService)
-	// Enable gRPC reflection for easier debugging
 	reflection.Register(server)
 
 	c := make(chan os.Signal, 1)

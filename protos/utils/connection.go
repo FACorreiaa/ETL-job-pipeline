@@ -3,6 +3,8 @@ package utils
 import (
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
+
+	g "esgbook-software-engineer-technical-test-2024/protos/protocol/grpc"
 )
 
 func NewConnection(serverAddress string) (*grpc.ClientConn, error) {

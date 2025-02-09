@@ -11,7 +11,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 
-	"github.com/FACorreiaa/fitme-grpc/logger"
+	"esgbook-software-engineer-technical-test-2024/middleware"
 )
 
 //func newTracerProvider(endpoint, apiKey, caCertPath string, insecure bool) (*trace.TracerProvider, error) {
@@ -117,11 +117,14 @@ import (
 
 func NewOTLPExporter(ctx context.Context) (trace.SpanExporter, error) {
 	// Change default HTTPS -> HTTP
-	log := logger.Log
-	otlpEndpoint := os.Getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT")
+	zapLogger, err := middleware.InitializeLogger()
+	if err != nil {
+		return nil, fmt.Errorf("error loading logger")
+	}
+	otlpEndpoint := os.Getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT_GRPC")
 	fmt.Printf("otlp endpoint %s\n", otlpEndpoint)
 	if otlpEndpoint == "" {
-		log.Error("You MUST set OTEL_EXPORTER_OTLP_TRACES_ENDPOINT env variable!")
+		zapLogger.Error("You MUST set OTEL_EXPORTER_OTLP_TRACES_ENDPOINT env variable!")
 	}
 
 	insecureOpt := sdktrace.WithInsecure()

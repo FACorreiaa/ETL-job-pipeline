@@ -7,15 +7,31 @@ service ScoringService {
 }
 
 message CalculateRequest {
-  string config_file = 1; // or pass needed params
+  string config_file = 1;
+  BaseRequest request = 100;
 }
 
 message CalculateResponse {
-  repeated CompanyScore scores = 1;
+  bool success = 1;
+  string message = 2;
+  repeated CompanyScore scores = 3;
+  BaseResponse response = 100;
+
 }
 
 message CompanyScore {
   string company_id = 1;
   int32 year = 2;
   map<string, double> metrics = 3;
+}
+
+message BaseRequest {
+  string downstream = 998;
+  string request_id = 999;
+}
+
+message BaseResponse {
+  string upstream = 998;
+  string request_id = 999;
+  string status = 1000;
 }

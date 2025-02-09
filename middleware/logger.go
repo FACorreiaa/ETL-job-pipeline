@@ -75,3 +75,11 @@ func ZapLoggingMiddleware(zapLogger *zap.Logger) gin.HandlerFunc {
 		)
 	}
 }
+
+func InitializeLogger() (*zap.Logger, error) {
+	zapLogger, err := zap.NewDevelopment()
+	if err != nil {
+		return nil, err
+	}
+	return zapLogger, nil
+}

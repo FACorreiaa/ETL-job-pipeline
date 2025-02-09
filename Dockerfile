@@ -26,7 +26,8 @@ RUN go install github.com/air-verse/air@latest
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-EXPOSE 8080
+EXPOSE 8000
+EXPOSE 8001
 CMD ["air"]
 
 FROM alpine:latest AS prod
@@ -43,5 +44,6 @@ RUN echo "Contents of /app/config during build:" && ls -al /app/config || echo "
 RUN ls -al /app/internal || echo "No /app/internal found" && sleep 1
 
 EXPOSE 8000
+EXPOSE 8001
 EXPOSE 8181
 CMD ["score-app"]

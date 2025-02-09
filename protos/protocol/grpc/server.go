@@ -10,14 +10,13 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware"
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpclog"
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcprometheus"
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcratelimit"
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcrecovery"
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcrequest"
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcspan"
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/session"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpclog"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpcprometheus"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpcratelimit"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpcrecovery"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpcrequest"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpcspan"
 )
 
 // BootstrapServer creates a new gRPC server with the base middleware included.
@@ -63,8 +62,7 @@ func BootstrapServer(
 	_, logInterceptor := grpclog.Interceptors(log)
 	// -- Recovery interceptor setup
 	_, recoveryInterceptor := grpcrecovery.Interceptors(grpcrecovery.RegisterMetrics(registry))
-	// session
-	sessionInterceptor := session.InterceptorSession()
+
 	requestGeneratorSession := grpcrequest.RequestIDMiddleware()
 	//globalRateLimiter := grpcratelimit.Interceptors()
 
@@ -85,7 +83,6 @@ func BootstrapServer(
 			promInterceptor.Unary,
 			serverInterceptor.Unary,
 			logInterceptor.Unary,
-			sessionInterceptor,
 			requestGeneratorSession,
 			recoveryInterceptor.Unary,
 			rateLimiter.UnaryServerInterceptor(),

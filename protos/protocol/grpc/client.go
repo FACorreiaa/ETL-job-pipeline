@@ -8,8 +8,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpclog"
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcspan"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpclog"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpcspan"
 )
 
 func BootstrapClient(

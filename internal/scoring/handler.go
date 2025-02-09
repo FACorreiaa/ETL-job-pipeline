@@ -10,7 +10,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.uber.org/zap"
+
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpcrequest"
 )
 
 type Handler struct {
@@ -22,6 +25,10 @@ type Handler struct {
 // CalculateScoreHandler Calculate scores and print in csv format
 func (h *Handler) CalculateScoreHandler(c *gin.Context) {
 	ctx := c.Request.Context()
+	requestID, ok := ctx.Value(grpcrequest.RequestIDKey{}).(string)
+	if !ok {
+		return
+	}
 	tracer := otel.Tracer("score-app")
 	_, span := tracer.Start(ctx, "CalculateScoreHTTP")
 	defer span.End()
@@ -37,6 +44,9 @@ func (h *Handler) CalculateScoreHandler(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Error: %v", err)
 		return
 	}
+	span.SetAttributes(
+		attribute.String("request.id", requestID),
+	)
 
 	c.Header("Content-Type", "text/csv")
 	c.Header("Content-Disposition", `attachment; filename="scores.csv"`)

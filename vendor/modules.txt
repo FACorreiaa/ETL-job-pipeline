@@ -1,24 +1,3 @@
-# github.com/FACorreiaa/fitme-grpc v0.0.0-20250206105117-b583f0ca1c3c
-## explicit; go 1.23.5
-github.com/FACorreiaa/fitme-grpc/internal/domain
-github.com/FACorreiaa/fitme-grpc/logger
-github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware
-github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpclog
-github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcprometheus
-github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcratelimit
-github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcrecovery
-github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcrequest
-github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/grpcspan
-github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware/session
-# github.com/FACorreiaa/fitme-protos v0.0.0-20250125164354-fe5c3e352e12
-## explicit; go 1.23.5
-github.com/FACorreiaa/fitme-protos/modules/activity/generated
-github.com/FACorreiaa/fitme-protos/modules/calculator/generated
-github.com/FACorreiaa/fitme-protos/modules/customer/generated
-github.com/FACorreiaa/fitme-protos/modules/meal/generated
-github.com/FACorreiaa/fitme-protos/modules/measurement/generated
-github.com/FACorreiaa/fitme-protos/modules/user/generated
-github.com/FACorreiaa/fitme-protos/modules/workout/generated
 # github.com/beorn7/perks v1.0.1
 ## explicit; go 1.11
 github.com/beorn7/perks/quantile
@@ -75,9 +54,6 @@ github.com/cloudwego/base64x
 # github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 ## explicit
 github.com/davecgh/go-spew/spew
-# github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f
-## explicit
-github.com/dgryski/go-rendezvous
 # github.com/fsnotify/fsnotify v1.8.0
 ## explicit; go 1.17
 github.com/fsnotify/fsnotify
@@ -126,9 +102,6 @@ github.com/goccy/go-json/internal/encoder/vm_color_indent
 github.com/goccy/go-json/internal/encoder/vm_indent
 github.com/goccy/go-json/internal/errors
 github.com/goccy/go-json/internal/runtime
-# github.com/golang-jwt/jwt/v5 v5.2.1
-## explicit; go 1.18
-github.com/golang-jwt/jwt/v5
 # github.com/golang/protobuf v1.5.4
 ## explicit; go 1.17
 github.com/golang/protobuf/jsonpb
@@ -168,29 +141,6 @@ github.com/hashicorp/hcl/hcl/token
 github.com/hashicorp/hcl/json/parser
 github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
-# github.com/jackc/pgpassfile v1.0.0
-## explicit; go 1.12
-github.com/jackc/pgpassfile
-# github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761
-## explicit; go 1.14
-github.com/jackc/pgservicefile
-# github.com/jackc/pgx/v5 v5.7.2
-## explicit; go 1.21
-github.com/jackc/pgx/v5
-github.com/jackc/pgx/v5/internal/iobufpool
-github.com/jackc/pgx/v5/internal/pgio
-github.com/jackc/pgx/v5/internal/sanitize
-github.com/jackc/pgx/v5/internal/stmtcache
-github.com/jackc/pgx/v5/pgconn
-github.com/jackc/pgx/v5/pgconn/ctxwatch
-github.com/jackc/pgx/v5/pgconn/internal/bgreader
-github.com/jackc/pgx/v5/pgproto3
-github.com/jackc/pgx/v5/pgtype
-github.com/jackc/pgx/v5/pgxpool
-# github.com/jackc/puddle/v2 v2.2.2
-## explicit; go 1.19
-github.com/jackc/puddle/v2
-github.com/jackc/puddle/v2/internal/genstack
 # github.com/json-iterator/go v1.1.12
 ## explicit; go 1.12
 github.com/json-iterator/go
@@ -261,16 +211,6 @@ github.com/prometheus/common/model
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
-# github.com/redis/go-redis/v9 v9.7.0
-## explicit; go 1.18
-github.com/redis/go-redis/v9
-github.com/redis/go-redis/v9/internal
-github.com/redis/go-redis/v9/internal/hashtag
-github.com/redis/go-redis/v9/internal/hscan
-github.com/redis/go-redis/v9/internal/pool
-github.com/redis/go-redis/v9/internal/proto
-github.com/redis/go-redis/v9/internal/rand
-github.com/redis/go-redis/v9/internal/util
 # github.com/sagikazarmark/locafero v0.7.0
 ## explicit; go 1.21
 github.com/sagikazarmark/locafero
@@ -397,6 +337,8 @@ go.opentelemetry.io/otel/sdk/internal/x
 go.opentelemetry.io/otel/sdk/resource
 go.opentelemetry.io/otel/sdk/trace
 go.opentelemetry.io/otel/sdk/trace/tracetest
+# go.opentelemetry.io/otel/sdk/metric v1.33.0
+## explicit; go 1.22.0
 # go.opentelemetry.io/otel/trace v1.34.0
 ## explicit; go 1.22.0
 go.opentelemetry.io/otel/trace
@@ -427,7 +369,6 @@ go.uber.org/zap/zapcore
 golang.org/x/arch/x86/x86asm
 # golang.org/x/crypto v0.33.0
 ## explicit; go 1.20
-golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/sha3
 # golang.org/x/exp v0.0.0-20250207012021-f9890c6ad9f3
 ## explicit; go 1.22.0
@@ -446,9 +387,6 @@ golang.org/x/net/http2/hpack
 golang.org/x/net/idna
 golang.org/x/net/internal/timeseries
 golang.org/x/net/trace
-# golang.org/x/sync v0.11.0
-## explicit; go 1.18
-golang.org/x/sync/semaphore
 # golang.org/x/sys v0.30.0
 ## explicit; go 1.18
 golang.org/x/sys/cpu
@@ -457,12 +395,10 @@ golang.org/x/sys/windows
 golang.org/x/sys/windows/registry
 # golang.org/x/text v0.22.0
 ## explicit; go 1.18
-golang.org/x/text/cases
 golang.org/x/text/encoding
 golang.org/x/text/encoding/internal
 golang.org/x/text/encoding/internal/identifier
 golang.org/x/text/encoding/unicode
-golang.org/x/text/internal
 golang.org/x/text/internal/language
 golang.org/x/text/internal/language/compact
 golang.org/x/text/internal/tag
@@ -470,11 +406,9 @@ golang.org/x/text/internal/utf8internal
 golang.org/x/text/language
 golang.org/x/text/runes
 golang.org/x/text/secure/bidirule
-golang.org/x/text/secure/precis
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-golang.org/x/text/width
 # golang.org/x/time v0.10.0
 ## explicit; go 1.18
 golang.org/x/time/rate

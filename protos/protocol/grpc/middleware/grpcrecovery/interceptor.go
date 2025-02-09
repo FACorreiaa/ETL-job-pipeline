@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/FACorreiaa/fitme-grpc/protocol/grpc/middleware"
+	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware"
 )
 
 func RegisterMetrics(registry *prometheus.Registry) prometheus.Counter {
