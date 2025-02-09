@@ -1,9 +1,6 @@
-# ESGBook Data & Analytics Software Engineer Technical Test
+# ESGBook Data & Analytics Software Engineer 
 
 This repository contains the exercise for ESGBook Data & Analytics Software Engineer roles.
-
-## Time
-We recommend spending around 1-2 hours on this test. But feel free to spend more time if you want to.
 
 ## Requirements
 There are two main approaches that people usually take when doing this test:
@@ -209,3 +206,8 @@ inside Grafana. The same process could be applied to a k8s cluster deployment.
 2. Intermediate storage for incremental aggregation
 3. Use distributed data processing frameworks (e.g., Apache Spark or Flink) for real-time and batch processing# etl-data-preprocess-
 # ETL-job-pipeline
+
+# Benchmark HTTP vs gRPC
+
+- http:
+- gRPC: 

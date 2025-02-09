@@ -2,13 +2,13 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 
+	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
-	"go.opentelemetry.io/otel/sdk/resource"
 	oteltrace "go.opentelemetry.io/otel/sdk/trace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 )
 
 // NewConsoleExporter Console Exporter, only for testing locally
@@ -59,21 +59,45 @@ func NewOTLPExporter(ctx context.Context, endpoint string) (oteltrace.SpanExport
 	return otlptracehttp.New(ctx, insecureOpt, endpointOpt, pathOpt)
 }
 
-func NewTraceProvider(exp sdktrace.SpanExporter) *sdktrace.TracerProvider {
-	r, err := resource.Merge(
-		resource.Default(),
-		resource.NewWithAttributes(
-			semconv.SchemaURL,
-			semconv.ServiceName("score-app"),
-		),
-	)
+//func NewTraceProvider(exp sdktrace.SpanExporter) *sdktrace.TracerProvider {
+//	r, err := resource.Merge(
+//		resource.Default(),
+//		resource.NewWithAttributes(
+//			semconv.SchemaURL,
+//			semconv.ServiceName("score-app"),
+//		),
+//	)
+//
+//	if err != nil {
+//		panic(err)
+//	}
+//
+//	return sdktrace.NewTracerProvider(
+//		sdktrace.WithBatcher(exp),
+//		sdktrace.WithResource(r),
+//	)
+//}
 
+func InitExporters(ctx context.Context) error {
+	tempoExporter, err := NewOTLPExporter(ctx, "tempo:4318")
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("failed to create Tempo exporter: %w", err)
 	}
 
-	return sdktrace.NewTracerProvider(
-		sdktrace.WithBatcher(exp),
-		sdktrace.WithResource(r),
+	jaegerExporter, err := NewOTLPExporter(ctx, "jaeger:4318")
+	if err != nil {
+		return fmt.Errorf("failed to create Jaeger exporter: %w", err)
+	}
+
+	multiExporter := NewMultiExporter(tempoExporter, jaegerExporter)
+
+	// Create a tracer provider using the multi-exporter.
+	tp := sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(multiExporter),
+		// Add any additional options or resources as needed.
 	)
+	otel.SetTracerProvider(tp)
+
+	// Optionally, you can store tp so that you can call Shutdown later.
+	return nil
 }
