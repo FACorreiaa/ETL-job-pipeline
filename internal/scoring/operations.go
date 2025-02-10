@@ -101,7 +101,7 @@ type OperationFn func(
 	datasets map[string]map[CompanyYearKey]map[string]float64,
 ) (float64, bool, error)
 
-var operations = map[string]OperationFn{
+var Operations = map[string]OperationFn{
 	"sum":    evalSum,
 	"or":     evalOr,
 	"divide": evalDivide,

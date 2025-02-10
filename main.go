@@ -37,14 +37,6 @@ func main() {
 		serverPort = "8000"
 	}
 
-	//c := make(chan os.Signal, 1)
-	//signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	//go func() {
-	//	<-c
-	//	fmt.Println("Got OS signal, shutting down gracefully...")
-	//	cancel()
-	//}()
-
 	// Initialize the multi-exporter (Tempo and Jaeger) and set the global tracer provider.
 	if err := m.InitExporters(ctx); err != nil {
 		zapLogger.Sugar().Error("Failed to initialize exporters", "err", err)

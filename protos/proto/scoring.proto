@@ -4,6 +4,7 @@ package scoringpb;
 
 service ScoringService {
   rpc CalculateScores (CalculateRequest) returns (CalculateResponse);
+  rpc CalculateScoresStream (CalculateRequest) returns (stream CompanyScore);
 }
 
 message CalculateRequest {

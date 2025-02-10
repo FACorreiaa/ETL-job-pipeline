@@ -8,6 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"esgbook-software-engineer-technical-test-2024/internal/config"
 )
 
 func TestLoadDatasetCSV(t *testing.T) {
@@ -26,7 +28,7 @@ func TestLoadDatasetCSV(t *testing.T) {
 	require.NoError(t, tmpfile.Close())
 
 	// 2) Call the function under test
-	results, err := loadDatasetCSV(tmpfile.Name())
+	results, err := config.LoadDatasetCSV(tmpfile.Name())
 	require.NoError(t, err)
 
 	// 3) Validate what we expect

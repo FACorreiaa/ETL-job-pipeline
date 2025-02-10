@@ -1,6 +1,43 @@
 package scoring
 
-// LoaderRegistry holds a map of extension => DataLoader
+import "time"
+
+const (
+	Dir        = "data"
+	NumWorkers = 5
+)
+
+type ScoredRow struct {
+	Key     CompanyYearKey
+	Metrics map[string]float64
+}
+
+// Wrap the result in the channel
+type RowResult struct {
+	Row ScoredRow
+	Err error
+}
+
+type CompanyYearKey struct {
+	CompanyID string
+	Year      int
+}
+
+type rowData struct {
+	Date    time.Time
+	Numeric map[string]float64
+}
+
+// just to test the json file
+type RawJSONRow struct {
+	CompanyID string   `json:"company_id"`
+	DateStr   string   `json:"date"`
+	Dis1      *float64 `json:"dis_1,omitempty"`
+	Dis2      *float64 `json:"dis_2,omitempty"`
+	Dis3      *float64 `json:"dis_3,omitempty"`
+	Dis4      *float64 `json:"dis_4,omitempty"`
+}
+
 type LoaderRegistry struct {
 	registry map[string]DataLoader
 }
@@ -38,7 +75,7 @@ func NewDataLoaderService(lr *LoaderRegistry) *DataLoaderService {
 	return &DataLoaderService{registry: lr}
 }
 
-var datasetKeys = map[string]string{
+var DatasetKeys = map[string]string{
 	"disclosure": "disclosure_data",
 	"waste":      "waste_data",
 	"emissions":  "emissions_data",

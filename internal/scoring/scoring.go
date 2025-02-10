@@ -6,48 +6,11 @@ import (
 	"sort"
 	"strings"
 	"sync"
-	"time"
 
 	"go.uber.org/zap"
 
 	c "esgbook-software-engineer-technical-test-2024/pkg/config"
 )
-
-const (
-	dir        = "data"
-	numWorkers = 5
-)
-
-type ScoredRow struct {
-	Key     CompanyYearKey
-	Metrics map[string]float64
-}
-
-// Wrap the result in the channel
-type rowResult struct {
-	Row ScoredRow
-	Err error
-}
-
-type CompanyYearKey struct {
-	CompanyID string
-	Year      int
-}
-
-type rowData struct {
-	date    time.Time
-	numeric map[string]float64
-}
-
-// just to test the json file
-type rawJSONRow struct {
-	CompanyID string   `json:"company_id"`
-	DateStr   string   `json:"date"`
-	Dis1      *float64 `json:"dis_1,omitempty"`
-	Dis2      *float64 `json:"dis_2,omitempty"`
-	Dis3      *float64 `json:"dis_3,omitempty"`
-	Dis4      *float64 `json:"dis_4,omitempty"`
-}
 
 // buildDependencyGraph list of metrics that depend on 'a'
 func buildDependencyGraph(logger *zap.Logger, scoreConfig *c.Config) (map[string][]string, map[string]int) {
@@ -115,23 +78,6 @@ func topologicalSort(
 	return sorted, nil
 }
 
-func buildMetricMap(scoreConfig *c.Config) map[string]c.Metric {
-	m := make(map[string]c.Metric)
-	for _, met := range scoreConfig.Metrics {
-		m[met.Name] = met
-	}
-	return m
-}
-
-func indexOf(slice []string, target string) int {
-	for i, s := range slice {
-		if s == target {
-			return i
-		}
-	}
-	return -1
-}
-
 func getAllDataCompanyKeys(datasets map[string]map[CompanyYearKey]map[string]float64) []CompanyYearKey {
 	unique := make(map[CompanyYearKey]bool)
 	for _, ds := range datasets {
@@ -151,7 +97,7 @@ func evaluateMetric(
 	logger *zap.Logger,
 	metric c.Metric,
 	key CompanyYearKey,
-	//results map[CompanyYearKey]map[string]float64,
+//results map[CompanyYearKey]map[string]float64,
 	results map[string]float64,
 	datasets map[string]map[CompanyYearKey]map[string]float64,
 ) (float64, bool) {
@@ -160,7 +106,7 @@ func evaluateMetric(
 		return val, false
 	}
 
-	opFn, ok := operations[metric.Operation.Type]
+	opFn, ok := Operations[metric.Operation.Type]
 	if !ok {
 		logger.Sugar().Infow("No value for key",
 			zap.String("company_id", key.CompanyID),
@@ -192,7 +138,7 @@ func getValue(
 	logger *zap.Logger,
 	source string,
 	key CompanyYearKey,
-	//results map[CompanyYearKey]map[string]float64,
+//results map[CompanyYearKey]map[string]float64,
 	results map[string]float64,
 	datasets map[string]map[CompanyYearKey]map[string]float64,
 ) (float64, bool) {
@@ -257,7 +203,7 @@ func parallelComputeScores(
 	numWorkers int,
 ) []ScoredRow {
 	jobs := make(chan CompanyYearKey, len(allKeys))
-	results := make(chan rowResult, len(allKeys))
+	results := make(chan RowResult, len(allKeys))
 
 	var wg sync.WaitGroup
 	wg.Add(numWorkers)
@@ -267,7 +213,7 @@ func parallelComputeScores(
 			defer wg.Done()
 			for key := range jobs {
 				metricsMap := computeScoresForKey(ctx, logger, key, topoOrder, metricMap, datasets)
-				results <- rowResult{
+				results <- RowResult{
 					Row: ScoredRow{
 						Key:     key,
 						Metrics: metricsMap,
@@ -357,16 +303,16 @@ func CalculateScore(
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed topological sort: %v", err)
 	}
-	metricMap := buildMetricMap(scoreConfig)
+	metricMap := BuildMetricMap(scoreConfig)
 
 	// Load all CSVs (or other files) from "data/" using the injected service
-	combined, err := dataService.LoadAllData(ctx, dir)
+	combined, err := dataService.LoadAllData(ctx, Dir)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to load data from folder: %w", err)
 	}
 
 	datasets := make(map[string]map[CompanyYearKey]map[string]float64)
-	for logicalName, csvKey := range datasetKeys {
+	for logicalName, csvKey := range DatasetKeys {
 		data, ok := combined[csvKey]
 		if !ok {
 			return nil, nil, fmt.Errorf("missing dataset for key=%q", csvKey)
@@ -376,7 +322,7 @@ func CalculateScore(
 
 	allKeys := getAllDataCompanyKeys(datasets)
 
-	scoredResults := parallelComputeScores(ctx, logger, allKeys, topoOrder, metricMap, datasets, numWorkers)
+	scoredResults := parallelComputeScores(ctx, logger, allKeys, topoOrder, metricMap, datasets, NumWorkers)
 
 	logger.Sugar().Infow("Scoring results",
 		"results", scoredResults,
@@ -384,4 +330,60 @@ func CalculateScore(
 	)
 
 	return scoreConfig, scoredResults, nil
+}
+
+func StreamScores(ctx context.Context,
+	logger *zap.Logger,
+	allKeys []CompanyYearKey,
+	topoOrder []string,
+	metricMap map[string]c.Metric,
+	datasets map[string]map[CompanyYearKey]map[string]float64,
+	numWorkers int) (<-chan ScoredRow, error) {
+	out := make(chan ScoredRow)
+	go func() {
+		defer close(out)
+		jobs := make(chan CompanyYearKey, len(allKeys))
+		results := make(chan RowResult, len(allKeys))
+		var wg sync.WaitGroup
+		wg.Add(numWorkers)
+
+		for i := 0; i < numWorkers; i++ {
+			go func() {
+				defer wg.Done()
+				for key := range jobs {
+					metricsMap := computeScoresForKey(ctx, logger, key, topoOrder, metricMap, datasets)
+					results <- RowResult{
+						Row: ScoredRow{
+							Key:     key,
+							Metrics: metricsMap,
+						},
+						Err: nil,
+					}
+				}
+			}()
+		}
+
+		for _, key := range allKeys {
+			jobs <- key
+		}
+		close(jobs)
+
+		go func() {
+			wg.Wait()
+			close(results)
+		}()
+
+		for r := range results {
+			if r.Err != nil {
+				logger.Sugar().Errorf("Error computing score for %s %d: %v", r.Row.Key.CompanyID, r.Row.Key.Year, r.Err)
+				continue
+			}
+			select {
+			case <-ctx.Done():
+				return
+			case out <- r.Row:
+			}
+		}
+	}()
+	return out, nil
 }

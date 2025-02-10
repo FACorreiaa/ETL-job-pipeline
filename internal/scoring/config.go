@@ -100,14 +100,14 @@ func loadDatasetCSV(filename string) (map[CompanyYearKey]map[string]float64, err
 		// 3) Check if we have an existing entry for (company, year). If not, store it.
 		if existing, ok := data[key]; !ok {
 			data[key] = rowData{
-				date:    parsedTime,
-				numeric: numericVals,
+				Date:    parsedTime,
+				Numeric: numericVals,
 			}
 		} else {
-			if parsedTime.After(existing.date) {
+			if parsedTime.After(existing.Date) {
 				data[key] = rowData{
-					date:    parsedTime,
-					numeric: numericVals,
+					Date:    parsedTime,
+					Numeric: numericVals,
 				}
 			}
 		}
@@ -115,7 +115,7 @@ func loadDatasetCSV(filename string) (map[CompanyYearKey]map[string]float64, err
 
 	result := make(map[CompanyYearKey]map[string]float64)
 	for key, rd := range data {
-		result[key] = rd.numeric
+		result[key] = rd.Numeric
 	}
 
 	return result, nil
@@ -134,7 +134,7 @@ func loadJSONDataset(filename string) (map[CompanyYearKey]map[string]float64, er
 		return nil, fmt.Errorf("error reading %s: %w", filename, err)
 	}
 
-	var rows []rawJSONRow
+	var rows []RawJSONRow
 	if err := json.Unmarshal(bytes, &rows); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal JSON from %s: %w", filename, err)
 	}
@@ -171,14 +171,14 @@ func loadJSONDataset(filename string) (map[CompanyYearKey]map[string]float64, er
 
 		if existing, ok := data[key]; !ok {
 			data[key] = rowData{
-				date:    parsedTime,
-				numeric: numericVals,
+				Date:    parsedTime,
+				Numeric: numericVals,
 			}
 		} else {
-			if parsedTime.After(existing.date) {
+			if parsedTime.After(existing.Date) {
 				data[key] = rowData{
-					date:    parsedTime,
-					numeric: numericVals,
+					Date:    parsedTime,
+					Numeric: numericVals,
 				}
 			}
 		}
@@ -186,7 +186,7 @@ func loadJSONDataset(filename string) (map[CompanyYearKey]map[string]float64, er
 
 	result := make(map[CompanyYearKey]map[string]float64, len(data))
 	for k, rd := range data {
-		result[k] = rd.numeric
+		result[k] = rd.Numeric
 	}
 
 	return result, nil

@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	c "esgbook-software-engineer-technical-test-2024/pkg/config"
 )
 
 func parseDateOrYear(raw string) (time.Time, error) {
@@ -32,4 +34,21 @@ func validateData(companyID string, year int) error {
 		return fmt.Errorf("invalid year: %d", year)
 	}
 	return nil
+}
+
+func BuildMetricMap(scoreConfig *c.Config) map[string]c.Metric {
+	m := make(map[string]c.Metric)
+	for _, met := range scoreConfig.Metrics {
+		m[met.Name] = met
+	}
+	return m
+}
+
+func indexOf(slice []string, target string) int {
+	for i, s := range slice {
+		if s == target {
+			return i
+		}
+	}
+	return -1
 }

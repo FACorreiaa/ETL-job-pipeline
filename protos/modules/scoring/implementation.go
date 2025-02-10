@@ -53,3 +53,8 @@ func (b *Broker) GetAddress() string {
 func (b *Broker) CalculateScores(ctx context.Context, in *generated.CalculateRequest, opts ...grpc.CallOption) (*generated.CalculateResponse, error) {
 	return b.client.CalculateScores(ctx, in, opts...)
 }
+
+func (b *Broker) CalculateScoresStream(ctx context.Context, in *generated.CalculateRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[generated.CompanyScore], error) {
+	return b.client.CalculateScoresStream(ctx, in, opts...)
+
+}
