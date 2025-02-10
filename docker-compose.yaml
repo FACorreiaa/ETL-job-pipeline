@@ -18,91 +18,92 @@ services:
       - METRICS_PORT=8181
       - HTTP_SERVER_PORT=8000
       - GRPC_SERVER_PORT=8001
-    depends_on:
-      - jaeger
-      - tempo
+#    depends_on:
+#      - jaeger
+#      - tempo
+#      - otel-collector
+#      - loki
+#      - prometheus
     networks:
       - score-app-network
-  otel-collector:
-    image: otel/opentelemetry-collector:latest
-    container_name: otel-collector
-    volumes:
-      - ./pkg/config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
-    command: [ "--config", "/etc/otel-collector-config.yaml" ]
-    ports:
-      - "4317:4317"
-      - "4318:4318"
-      - "8889:8889"
-    networks:
-      - score-app-network
-
-  tempo:
-    image: grafana/tempo:latest
-    container_name: tempo
-    ports:
-      - "3200:3200"
-    volumes:
-      - ./pkg/config/tempo.yml:/etc/tempo/tempo.yml
-    command:
-      - '-config.file=/etc/tempo/tempo.yml'
-    networks:
-      - score-app-network
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    command: --config.file=/etc/prometheus/prometheus.yml
-    volumes:
-      - ./pkg/config/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-    depends_on:
-      - score-app
-    networks:
-      - score-app-network
-
-  grafana:
-    image: grafana/grafana-oss:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    volumes:
-          - ./pkg/config/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yml
-    depends_on:
-      - prometheus
-      - jaeger
-      - tempo
-    networks:
-      - score-app-network
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    container_name: jaeger
-    ports:
-      - "16686:16686"      # Jaeger UI (open in your browser)
-      - "6831:6831/udp"    # Jaeger Agent (thrift UDP)
-    networks:
-      - score-app-network
-
-  loki:
-    container_name: loki
-    image: grafana/loki:main
-    ports:
-      - "3100:3100"
-    volumes:
-      - ./pkg/config/loki-config.yaml:/etc/loki/local-config.yaml
-    command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - score-app-network
-
-  promtail:
-    container_name: promtail
-    image: grafana/promtail:latest
-    volumes:
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - ./pkg/config/promtail-config.yaml:/etc/promtail/promtail.yaml
-    command: -config.file=/etc/promtail/promtail.yaml
-    networks:
-      - score-app-network
+#  otel-collector:
+#    image: otel/opentelemetry-collector:latest
+#    container_name: otel-collector
+#    volumes:
+#      - ./pkg/config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+#    command: [ "--config", "/etc/otel-collector-config.yaml" ]
+#    ports:
+#      - "4317:4317"
+#      - "4318:4318"
+#      - "8889:8889"
+#    networks:
+#      - score-app-network
+#
+#  tempo:
+#    image: grafana/tempo:latest
+#    container_name: tempo
+#    ports:
+#      - "3200:3200"
+#    volumes:
+#      - ./pkg/config/tempo.yml:/etc/tempo/tempo.yml
+#    command:
+#      - '-config.file=/etc/tempo/tempo.yml'
+#    networks:
+#      - score-app-network
+#
+#  prometheus:
+#    image: prom/prometheus:latest
+#    container_name: prometheus
+#    command: --config.file=/etc/prometheus/prometheus.yml
+#    volumes:
+#      - ./pkg/config/prometheus.yml:/etc/prometheus/prometheus.yml
+#    ports:
+#      - "9090:9090"
+#    networks:
+#      - score-app-network
+#
+#  grafana:
+#    image: grafana/grafana-oss:latest
+#    container_name: grafana
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#          - ./pkg/config/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yml
+#    depends_on:
+#      - prometheus
+#      - jaeger
+#      - tempo
+#    networks:
+#      - score-app-network
+#  jaeger:
+#    image: jaegertracing/all-in-one:latest
+#    container_name: jaeger
+#    ports:
+#      - "16686:16686"      # Jaeger UI (open in your browser)
+#      - "6831:6831/udp"    # Jaeger Agent (thrift UDP)
+#    networks:
+#      - score-app-network
+#
+#  loki:
+#    container_name: loki
+#    image: grafana/loki:main
+#    ports:
+#      - "3100:3100"
+#    volumes:
+#      - ./pkg/config/loki-config.yaml:/etc/loki/local-config.yaml
+#    command: -config.file=/etc/loki/local-config.yaml
+#    networks:
+#      - score-app-network
+#
+#  promtail:
+#    container_name: promtail
+#    image: grafana/promtail:latest
+#    volumes:
+#      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+#      - ./pkg/config/promtail-config.yaml:/etc/promtail/promtail.yaml
+#    command: -config.file=/etc/promtail/promtail.yaml
+#    networks:
+#      - score-app-network
 
 networks:
   score-app-network:

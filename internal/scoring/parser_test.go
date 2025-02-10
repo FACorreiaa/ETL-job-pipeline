@@ -40,14 +40,14 @@ func TestLoadDatasetCSV(t *testing.T) {
 	require.Len(t, results, 2)
 
 	// Check (1000, 2023)
-	key1000_2023 := CompanyYearKey{CompanyID: "1000", Year: 2023}
-	row, ok := results[key1000_2023]
+	key10002023 := CompanyYearKey{CompanyID: "1000", Year: 2023}
+	row, ok := results[key10002023]
 	require.True(t, ok)
 	assert.Equal(t, 12.34, row["dis_1"])
 	assert.Equal(t, 56.78, row["dis_2"])
 
-	key1001_2024 := CompanyYearKey{CompanyID: "1001", Year: 2024}
-	row2, ok2 := results[key1001_2024]
+	key10012024 := CompanyYearKey{CompanyID: "1001", Year: 2024}
+	row2, ok2 := results[key10012024]
 	require.True(t, ok2)
 	assert.Equal(t, 44.44, row2["dis_1"])
 	assert.Equal(t, 88.88, row2["dis_2"])
@@ -77,14 +77,14 @@ func TestLoadDatasetJSON(t *testing.T) {
 	// 3) We expect (1000, 2023) and (1001, 2024) final entries, with "later" row overwriting the earlier one for (1001,2024).
 	require.Len(t, results, 2)
 
-	key1000_2023 := CompanyYearKey{CompanyID: "1000", Year: 2023}
-	row, ok := results[key1000_2023]
+	key10002023 := CompanyYearKey{CompanyID: "1000", Year: 2023}
+	row, ok := results[key10002023]
 	require.True(t, ok, "Expected an entry for (1000,2023)")
 	assert.Equal(t, 12.34, row["dis_1"])
 	assert.Equal(t, 56.78, row["dis_2"])
 
-	key1001_2024 := CompanyYearKey{CompanyID: "1001", Year: 2024}
-	row2, ok2 := results[key1001_2024]
+	key10012024 := CompanyYearKey{CompanyID: "1001", Year: 2024}
+	row2, ok2 := results[key10012024]
 	require.True(t, ok2, "Expected an entry for (1001,2024)")
 
 	// date "2024-06-30" vs "2024-01-15", we expect the 3rd to overwrite.

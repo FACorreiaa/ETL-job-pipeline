@@ -16,12 +16,10 @@ import (
 	m "esgbook-software-engineer-technical-test-2024/middleware"
 )
 
-const file = "score_1.yaml"
-
 func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
-	
+
 	zapLogger, err := middleware.InitializeLogger()
 	if err != nil {
 		panic("failed to initialize logging")
@@ -56,6 +54,13 @@ func main() {
 	errChan := make(chan error, 2)
 
 	go func() {
+		if err := server.RunGRPCServer(ctx, zapLogger, grpcPort, reg); err != nil {
+			zapLogger.Error("gRPC server error", zap.Error(err))
+			log.Fatal(err)
+		}
+	}()
+
+	go func() {
 		if err := server.RunHTTPServer(ctx, zapLogger, serverPort); err != nil {
 			zapLogger.Sugar().Error("Failed to bootstrap server", "err", err)
 			log.Fatal(err)
@@ -65,13 +70,6 @@ func main() {
 	go func() {
 		if err := middleware.ServePrometheus(ctx, ""); err != nil {
 			zapLogger.Sugar().Error("Failed to serve prometheus", "err", err)
-			log.Fatal(err)
-		}
-	}()
-
-	go func() {
-		if err := server.RunGRPCServer(ctx, zapLogger, grpcPort, reg); err != nil {
-			zapLogger.Error("gRPC server error", zap.Error(err))
 			log.Fatal(err)
 		}
 	}()

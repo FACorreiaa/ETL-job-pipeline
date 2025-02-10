@@ -16,6 +16,9 @@ up:
 test:
 	go test -v ./...
 
+bench:
+	go test -bench=. ./...
+
 help: ## Displays a list of available makefile command and their uses
 	@grep -E '^[A-z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s \n", $$1, $$2}'
 
