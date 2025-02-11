@@ -12,6 +12,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/reflection"
 
+	"esgbook-software-engineer-technical-test-2024/middleware"
 	pb "esgbook-software-engineer-technical-test-2024/protos/modules/scoring/generated"
 	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc"
 	"esgbook-software-engineer-technical-test-2024/protos/protocol/grpc/middleware/grpctracing"
@@ -22,7 +23,11 @@ var isReady atomic.Value
 
 func RunGRPCServer(ctx context.Context, zapLogger *zap.Logger, port string, reg *prometheus.Registry) error {
 	// Initialize OpenTelemetry trace provider
-	exp, err := grpctracing.NewOTLPExporter(ctx)
+	if err := middleware.InitExporters(ctx); err != nil {
+		return errors.Wrap(err, "failed to initialize exporters")
+	}
+
+	exp, err := middleware.NewGRPCMultiExporter(ctx)
 	if err != nil {
 		return errors.Wrap(err, "failed to configure OpenTelemetry trace provider")
 	}

@@ -97,7 +97,7 @@ func evaluateMetric(
 	logger *zap.Logger,
 	metric c.Metric,
 	key CompanyYearKey,
-//results map[CompanyYearKey]map[string]float64,
+	//results map[CompanyYearKey]map[string]float64,
 	results map[string]float64,
 	datasets map[string]map[CompanyYearKey]map[string]float64,
 ) (float64, bool) {
@@ -138,7 +138,7 @@ func getValue(
 	logger *zap.Logger,
 	source string,
 	key CompanyYearKey,
-//results map[CompanyYearKey]map[string]float64,
+	//results map[CompanyYearKey]map[string]float64,
 	results map[string]float64,
 	datasets map[string]map[CompanyYearKey]map[string]float64,
 ) (float64, bool) {

@@ -10,6 +10,7 @@ limits_config:
 
 server:
   http_listen_port: 3100
+  grpc_listen_port: 9095
 
 common:
   ring:

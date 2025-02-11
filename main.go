@@ -13,7 +13,6 @@ import (
 	"os"
 
 	"esgbook-software-engineer-technical-test-2024/internal/server"
-	m "esgbook-software-engineer-technical-test-2024/middleware"
 )
 
 func main() {
@@ -38,7 +37,7 @@ func main() {
 	}
 
 	// Initialize the multi-exporter (Tempo and Jaeger) and set the global tracer provider.
-	if err := m.InitExporters(ctx); err != nil {
+	if err := middleware.InitExporters(ctx); err != nil {
 		zapLogger.Sugar().Error("Failed to initialize exporters", "err", err)
 		log.Fatal(err)
 	}

@@ -6,7 +6,6 @@ import (
 	"os"
 
 	sdktrace "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
-
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
@@ -115,7 +114,7 @@ import (
 //	return lastErr
 //}
 
-func NewOTLPExporter(ctx context.Context) (trace.SpanExporter, error) {
+func NewOTLPExporter(ctx context.Context, endpoint string) (trace.SpanExporter, error) {
 	// Change default HTTPS -> HTTP
 	zapLogger, err := middleware.InitializeLogger()
 	if err != nil {
@@ -129,10 +128,7 @@ func NewOTLPExporter(ctx context.Context) (trace.SpanExporter, error) {
 
 	insecureOpt := sdktrace.WithInsecure()
 
-	// Update default OTLP reciver endpoint
 	endpointOpt := sdktrace.WithEndpoint(otlpEndpoint)
-
-	//timeout := otlptracehttp.WithTimeout(30 * time.Second)
 
 	return sdktrace.New(ctx, insecureOpt, endpointOpt)
 }
@@ -151,4 +147,24 @@ func NewTraceProvider(exp trace.SpanExporter) *trace.TracerProvider {
 	return trace.NewTracerProvider(
 		trace.WithBatcher(exp),
 		trace.WithResource(r))
+}
+
+func NewGRPCMultiExporter(ctx context.Context) (trace.SpanExporter, error) {
+	tempoExporter, err := sdktrace.New(ctx,
+		sdktrace.WithInsecure(),
+		sdktrace.WithEndpoint("tempo:4317"),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create Tempo exporter: %w", err)
+	}
+
+	jaegerExporter, err := sdktrace.New(ctx,
+		sdktrace.WithInsecure(),
+		sdktrace.WithEndpoint("jaeger:4317"),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create Jaeger exporter: %w", err)
+	}
+
+	return middleware.NewMultiExporter(tempoExporter, jaegerExporter), nil
 }
