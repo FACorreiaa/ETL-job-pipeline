@@ -2,7 +2,10 @@ receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: 0.0.0.0:4317
       http:
+        endpoint: 0.0.0.0:4318
+
 
 processors:
   batch: {}
@@ -15,20 +18,21 @@ exporters:
     sampling_thereafter: 200
 
   # Export traces to Jaeger via OTLP
-  otlp/jaeger:
-    endpoint: jaeger:4317
-    tls:
-      insecure: true
+  #  otlp/jaeger:
+  #    endpoint: jaeger:14250
+  #    tls:
+  #      insecure: true
 
   # Export traces to Tempo via OTLP
-  otlp/tempo:
+  otlp:
     endpoint: tempo:4317
     tls:
       insecure: true
 
   # Expose metrics on an internal endpoint for Prometheus to scrape
   prometheus:
-    endpoint: "0.0.0.0:8889"
+    #8889
+    endpoint: "0.0.0.0:9090"
 
   # Export logs to Loki via OTLP HTTP
   otlphttp/loki:
@@ -41,8 +45,8 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug, otlp/jaeger, otlp/tempo]
-
+      exporters: [debug, otlp]
+      #otlp/jaeger
     metrics:
       receivers: [otlp]
       processors: [batch]

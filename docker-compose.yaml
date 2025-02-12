@@ -105,6 +105,7 @@ services:
     command: -config.file=/etc/promtail/promtail.yaml
     networks:
       - score-app-network
-
+#GE Vernova (GEV), Baidu (BIDU), AMD, SoFi (SOFI),  Taiwan Semiconductor Manufacturing (TSM), Nextera Energy (NEE)
 networks:
   score-app-network:
+
